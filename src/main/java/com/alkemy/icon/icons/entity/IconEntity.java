@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -28,6 +30,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "icon")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE continente SET deleted= true WHERE id=?") //esta anotacion sirve para usar el soft delete
+@Where(clause = "deleted = false")//de esta manera queda diferenciado aquellos que fueron borrados los q no.
 public class IconEntity {
     
     @Id
@@ -50,4 +54,9 @@ public class IconEntity {
     
     @ManyToMany(mappedBy = "icons", cascade = CascadeType.ALL)
     private List<PaisEntity> paises = new ArrayList<>();
+
+    //Add and remove paises
+    public void addPais (PaisEntity pais){this.paises.add(pais);}
+
+    public void removePais (PaisEntity pais){this.paises.remove(pais);}
 }

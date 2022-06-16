@@ -7,15 +7,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-/**
- *
- * @author Joel
- */
 @Entity
 @Table(name = "continente")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE continente SET deleted= true WHERE id=?") //esta anotacion sirve para usar el soft delete
+@Where(clause = "deleted = false")//de esta manera queda diferenciado aquellos que fueron borrados los q no.
 public class ContinentEntity {
     
     @Id
@@ -25,4 +25,6 @@ public class ContinentEntity {
     private String imagen;
     
     private String denominacion;
+
+    private boolean deleted = Boolean.FALSE;
 }
